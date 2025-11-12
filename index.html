@@ -18,6 +18,7 @@
         /* Kustomisasi warna tema agar sesuai dengan aplikasi Anda */
         .bg-teal-600 { background-color: #0d9488; }
         .text-teal-600 { color: #0d9488; }
+        .hover\:bg-teal-700:hover { background-color: #0f766e; }
     </style>
 </head>
 <body class="bg-slate-50 antialiased">
@@ -34,22 +35,27 @@
                 <h2 class="text-xl font-semibold text-slate-800">Dukungan Pengembangan</h2>
                 <p class="mt-2 text-sm text-slate-500">Jazakumullah Khairan Katsiran atas dukungan Anda untuk biaya server dan pengembangan fitur.</p>
                 
-                <!-- Placeholder untuk Gambar QRIS -->
-                <div class="mt-6">
-                    <img 
-                        src="https://placehold.co/400x400/e2e8f0/94a3b8?text=QRIS+ANDA" 
-                        alt="Scan QRIS untuk Infaq"
-                        class="mx-auto w-full max-w-xs rounded-lg border-4 border-white shadow-md"
-                    >
-                    <!-- 
-                        CATATAN: 
-                        Ganti URL "src" di atas dengan URL gambar QRIS dari Imgur Anda.
-                    -->
+                <!-- Detail Transfer Bank -->
+                <div class="mt-6 space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-left">
+                    <div>
+                        <p class="text-xs font-medium text-slate-500">Bank</p>
+                        <p class="text-lg font-semibold text-slate-800">BSI (Bank Syariah Indonesia)</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500">Atas Nama</p>
+                        <p class="text-lg font-semibold text-slate-800">Ahmad Zulfikar</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500">Nomor Rekening</p>
+                        <p id="account-number" class="text-2xl font-bold tracking-wider text-teal-600">721593395</p>
+                    </div>
                 </div>
-                
-                <p class="mt-4 text-sm font-medium text-slate-700">
-                    Silakan scan kode QRIS di atas menggunakan aplikasi e-wallet atau m-banking Anda.
-                </p>
+
+                <!-- Tombol Salin -->
+                <button id="copy-button" class="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-teal-600 px-6 py-3 text-center font-medium text-white shadow-sm transition-colors hover:bg-teal-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-5 w-5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Salin No. Rekening
+                </button>
 
                 <!-- Tombol Kembali -->
                 <a href="landing_page.html" class="mt-6 block w-full rounded-lg bg-slate-100 px-6 py-3 text-center font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-200">
@@ -58,6 +64,48 @@
             </div>
         </div>
     </div>
+
+    <!-- Script untuk Salin ke Clipboard -->
+    <script>
+        document.getElementById('copy-button').addEventListener('click', function() {
+            const accountNumber = document.getElementById('account-number').innerText;
+            const button = this;
+            
+            // Buat elemen textarea sementara untuk menyalin
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = accountNumber;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            
+            try {
+                // Gunakan document.execCommand untuk kompatibilitas
+                document.execCommand('copy');
+                
+                // Beri umpan balik visual
+                button.innerText = 'Berhasil Disalin!';
+                button.classList.add('bg-green-500', 'hover:bg-green-600');
+                button.classList.remove('bg-teal-600', 'hover:bg-teal-700');
+                
+                // Kembalikan teks tombol setelah 2 detik
+                setTimeout(function() {
+                    button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-5 w-5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Salin No. Rekening';
+                    button.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    button.classList.add('bg-teal-600', 'hover:bg-teal-700');
+                }, 2000);
+                
+            } catch (err) {
+                console.error('Gagal menyalin: ', err);
+                // Umpan balik jika gagal
+                button.innerText = 'Gagal Menyalin';
+                setTimeout(function() {
+                    button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-5 w-5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Salin No. Rekening';
+                }, 2000);
+            }
+            
+            // Hapus textarea sementara
+            document.body.removeChild(tempTextArea);
+        });
+    </script>
 
 </body>
 </html>
